@@ -11,5 +11,5 @@ else
   let g:loaded_tedit = 'yes'
 endif
 
-tnoremap <silent> <C-F> <C-\><C-N>:call TeditF()<CR>
+tnoremap <silent> <C-F> <C-\><C-N>:call tedit#f()<CR>
 

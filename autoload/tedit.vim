@@ -1,8 +1,8 @@
 let g:tedit_prompt_regex = get(g:, 'tedit_prompt_regex', '')
 let g:tedit_window_height = get(g:, 'tedit_window_height', 7)
-let g:tedit_history_loader = get(g:, 'tedit_history_loader', 'echo To enable history loading, configure g:tedit_history_loader')
+let g:tedit_history_loader = get(g:, 'tedit_history_loader', 'echo "[Since g:tedit_history_loader is not configured, history loading is disabled]"')
 
-function! TeditF()
+function! tedit#f()
   let pos =  getpos('.')
   let line =  getline('.')
 
@@ -28,6 +28,7 @@ function! TeditF()
     let b:target_win_id = terminal_win_id
 
     " Load history
+    " TODO: Remove the first row.
     execute 'silent read !' . g:tedit_history_loader
 
     " Append current command and move the cursor to the original position.
@@ -40,8 +41,8 @@ function! TeditF()
 
     " Configure new win's mappings
     imap     <buffer><silent> <CR> <Esc><CR>
-    nnoremap <buffer><silent> <CR> :call TeditExec(0)<CR>
-    nnoremap <buffer><silent> <C-C> :call TeditExec(1)<CR>
+    nnoremap <buffer><silent> <CR> :call tedit#exec(0)<CR>
+    nnoremap <buffer><silent> <C-C> :call tedit#exec(1)<CR>
 
     " Close tedit when the cursor will leave.
     " TODO: Show warning before leave if can.
@@ -52,7 +53,7 @@ function! TeditF()
   endif
 endfunction
 
-function! TeditExec(dry)
+function! tedit#exec(dry)
   call jobsend(b:target_terminal_job_id, "\<C-U>" . getline('.') . (a:dry ? '' : "\<CR>"))
   call win_gotoid(b:target_win_id)
   startinsert
