@@ -28,8 +28,7 @@ function! tedit#f()
     let b:target_win_id = terminal_win_id
 
     " Load history
-    " TODO: Remove the first row.
-    execute 'silent read !' . g:tedit_history_loader
+    execute 'silent 0read !' . g:tedit_history_loader
 
     " Append current command and move the cursor to the original position.
     if getline('$') == ''
