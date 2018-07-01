@@ -45,10 +45,10 @@ function! tedit#f()
 
     " Close tedit when the cursor will leave.
     " TODO: Show warning before leave if can.
-		augroup tedit
-			autocmd!
-			autocmd WinLeave <buffer> close
-		augroup END
+    augroup tedit
+      autocmd!
+      autocmd WinLeave <buffer> close
+    augroup END
   endif
 endfunction
 
