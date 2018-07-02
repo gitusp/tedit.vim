@@ -59,4 +59,7 @@ TODO:
 
 ## Feedback and Contribution
 
-TODO: 
+If you find any bug, please report them on Github Issues.
+Feel free to make feature requests or feature proposals.
+Thank you!
+
