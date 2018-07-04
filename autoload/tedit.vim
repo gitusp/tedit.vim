@@ -53,8 +53,10 @@ function! tedit#f()
 endfunction
 
 function! tedit#exec(dry)
-  call jobsend(b:target_terminal_job_id, "\<C-U>" . getline('.') . (a:dry ? '' : "\<CR>"))
+  let target_terminal_job_id = b:target_terminal_job_id
+  let cmd = "\<C-U>" . getline('.') . (a:dry ? '' : "\<CR>")
   call win_gotoid(b:target_win_id)
+  call jobsend(target_terminal_job_id, cmd)
   startinsert
 endfunction
 
