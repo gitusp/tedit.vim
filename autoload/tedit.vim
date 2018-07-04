@@ -1,5 +1,6 @@
 let g:tedit_prompt_regex = get(g:, 'tedit_prompt_regex', '')
 let g:tedit_window_height = get(g:, 'tedit_window_height', 7)
+" TODO: shell detection and auto configuration
 let g:tedit_history_loader = get(g:, 'tedit_history_loader', 'echo "[Since g:tedit_history_loader is not configured, history loading is disabled]"')
 
 function! tedit#f()
@@ -13,8 +14,7 @@ function! tedit#f()
   else
     let cmd = substitute(line, g:tedit_prompt_regex, '', '')
 
-    " Keep the terminal job id in a function local variable.
-    let terminal_job_id = b:terminal_job_id
+    " Keep the terminal win id in a function local variable.
     let terminal_win_id = win_getid()
 
     " Split command editor
@@ -24,8 +24,7 @@ function! tedit#f()
     " NOTE: Best with 'Shougo/deoplete.nvim' and 'zchee/deoplete-zsh'.
     setlocal filetype=zsh
     execute 'resize ' . g:tedit_window_height
-    let b:target_terminal_job_id = terminal_job_id
-    let b:target_win_id = terminal_win_id
+    let b:tedit_terminal_win_id = terminal_win_id
 
     " Load history
     execute 'silent 0read !' . g:tedit_history_loader
@@ -44,19 +43,18 @@ function! tedit#f()
     nnoremap <buffer><silent> <C-C> :call tedit#exec(1)<CR>
 
     " Close tedit when the cursor will leave.
-    " TODO: Show warning before leave if can.
     augroup tedit
       autocmd!
+      " TODO: Back to the buffer and show warning if the buffer is alive.
       autocmd WinLeave <buffer> close
     augroup END
   endif
 endfunction
 
 function! tedit#exec(dry)
-  let target_terminal_job_id = b:target_terminal_job_id
   let cmd = "\<C-U>" . getline('.') . (a:dry ? '' : "\<CR>")
-  call win_gotoid(b:target_win_id)
-  call jobsend(target_terminal_job_id, cmd)
+  call win_gotoid(b:tedit_terminal_win_id)
+  call jobsend(b:terminal_job_id, cmd)
   startinsert
 endfunction
 
