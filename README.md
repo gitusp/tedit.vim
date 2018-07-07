@@ -4,14 +4,17 @@ tedit.vim
 Have you ever wanted to edit or browse the history of shell commands, in the way that you do for Vim commands?
 This plugin is devoted to achieve the goal.
 
-Pressing Ctrl-F in terminal mode, just like you do when you edit Vim commands, you can open a mini command history window.
-Just like the window for Vim commands, pressing Enter key executes the command immediately, and command editing using Vim's powerful features is supported.
-(NOTE: Since Ctrl-F is bound to moving the cursor to right, it will open the window only when the cursor is on the end of line.)
+Pressing Ctrl-F in terminal mode, just like you do when you edit Vim commands, you can open a mini command history window for shell.
+Just like the window for Vim commands, pressing Enter key executes the command immediately, and you can edit commands using Vim's powerful feature!
+(NOTE: Since Ctrl-F is bound to moving the cursor to right, it opens the window only when the cursor is at the end of line.)
 
 ---
 
 * [Requirements](#requirements)
 * [Installation](#installation)
+  * [Register Plugin](#register-plugin)
+  * [Register Shell Prompt Style](#register-shell-prompt-style)
+  * [Register Shell History Loading Command](#register-shell-history-loading-command)
 * [Configuration](#configuration)
   * [Mandatory Configuration](#mandatory-configuration)
   * [Optional Configuration](#optional-configuration)
@@ -27,31 +30,54 @@ If you support this plugin's concept, PRs are always welcomed!
 
 ## Installation
 
+### Register Plugin
+
 Install with your favorite plugin manager like:
 
 ```vim
 Plug 'gitusp/tedit.vim'
 ```
 
-## Configuration
+### Register Shell Prompt Style
 
-Unfortunately, this plugin is not completely battery inside.
-Here's what you should go through before the magic happens:
+Since this plugin reads the current command just as a line then remove its prompt, configure `g:tedit_prompt_regex` fits to your shell style like:
+
+```vim
+let g:tedit_prompt_regex = '^\$ \?'
+```
+
+### Register Shell History Loading Command
+
+Configure `g:tedit_history_loader` to allow this plugin load and show your shell command history.
+`g:tedit_history_loader` accepts any shell commands.
+Here's some examples for different kinds of shell:
+
+#### Bash
+
+TODO:
+
+#### Zsh
+
+Since zsh history file has an escape char before a multibyte char, the substitution looks a bit complicated:
+
+```vim
+let g:tedit_history_loader = 'cat ~/.zhistory | perl -pe ''s/^.*?;//; s/\x83(.)/chr(ord($1)^32)/eg'''
+```
+
+## Configuration
 
 ### Mandatory Configuration
 
-| Variable               | Description                                     | Example                                                                                                                                               |
-|------------------------|-------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| g:tedit_prompt_regex   | A regex used to remove the prompt sign          | let g:tedit_prompt_regex = '^\$ \?'                                                                                                                   |
-| g:tedit_history_loader | An external commands to load your shell history | let g:tedit_history_loader = 'cat ~/.zhistory &#124; ruby -e ''puts STDIN.binmode.read.gsub(/\x83(.)/n){($1.ord^32).chr}'' &#124; sed ''s/[^;]*;//''' |
-
-_Since I use zsh, I cat the history file at first, then convert the stream to fix multibyte issues, trim the timestamps at last._
+| Variable               | Description                                  |
+|------------------------|----------------------------------------------|
+| g:tedit_prompt_regex   | A regex used to remove the prompt sign       |
+| g:tedit_history_loader | External commands to load your shell history |
 
 ### Optional Configuration
 
-| Variable              | Description                          | Example                       |
-|-----------------------|--------------------------------------|-------------------------------|
-| g:tedit_window_height | Height of the command history window | let g:tedit_window_height = 7 |
+| Variable              | Description                          |
+|-----------------------|--------------------------------------|
+| g:tedit_window_height | Height of the command history window |
 
 ## Screenshots
 
@@ -59,7 +85,7 @@ TODO:
 
 ## Feedback and Contribution
 
-If you find any bug, please report them on Github Issues.
+If you find a bug, please report it on Github Issues.
 Feel free to make feature requests or feature proposals.
 Thank you!
 

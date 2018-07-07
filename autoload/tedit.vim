@@ -1,6 +1,5 @@
 let g:tedit_prompt_regex = get(g:, 'tedit_prompt_regex', '')
 let g:tedit_window_height = get(g:, 'tedit_window_height', 7)
-" TODO: shell detection and auto configuration
 let g:tedit_history_loader = get(g:, 'tedit_history_loader', 'echo "[Since g:tedit_history_loader is not configured, history loading is disabled]"')
 
 function! tedit#f()
