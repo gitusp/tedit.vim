@@ -53,6 +53,8 @@ endfunction
 function! tedit#exec(dry)
   let cmd = "\<C-U>" . getline('.') . (a:dry ? '' : "\<CR>")
   call win_gotoid(b:tedit_terminal_win_id)
+  " HACK: redraw here to prevent causing an exception.
+  redraw
   call jobsend(b:terminal_job_id, cmd)
   startinsert
 endfunction
